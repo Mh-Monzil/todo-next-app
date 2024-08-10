@@ -103,7 +103,7 @@ export default function Home() {
 
       {/* table  */}
 
-      <div className="relative overflow-x-auto mt-24 w-[70%] mx-auto">
+      <div className="relative overflow-x-auto mt-24 w-[80%] mx-auto">
         <table className="w-full text-sm border-2  text-center">
           <thead className="text-xs uppercase bg-black text-white  border-b-2 border-b-gray-600">
             <tr>
