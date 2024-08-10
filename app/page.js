@@ -1,33 +1,50 @@
-'use client'
+"use client";
 import TodoList from "@/Components/TodoList";
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css'
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Home() {
-
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-  })
+  });
+
+  const [todoData, setTodoData] = useState([]);
+
+  const fetchTodos = async () => {
+    const res = await axios.get(`/api`);
+    setTodoData(res.data.todos);
+  };
+  console.log(todoData);
+  useEffect(() => {
+    fetchTodos();
+  }, []);
 
   const onChangeHandler = (e) => {
     const name = e.target.name;
     const value = e.target.value;
 
-    setFormData(form => ({...form, [name]: value}));
+    setFormData((form) => ({ ...form, [name]: value }));
     console.log(formData);
-  }
+  };
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     try {
-      
-      toast.success("Success")
+      const response = await axios.post("api", formData);
+
+      toast.success(response.data.message);
+      setFormData({
+        title: "",
+        description: "",
+      });
+      fetchTodos();
     } catch (error) {
-      toast.error(error)
+      toast.error(error);
     }
-  }
+  };
 
   return (
     <main>
@@ -36,18 +53,21 @@ export default function Home() {
         TODO Next App
       </h1>
 
-      <form onSubmit={onSubmitHandler} className="flex items-start flex-col gap-2 w-[80%] max-w-[600px] mt-24 px-2 mx-auto text-black">
+      <form
+        onSubmit={onSubmitHandler}
+        className="flex items-start flex-col gap-2 w-[80%] max-w-[600px] mt-24 px-2 mx-auto text-black"
+      >
         <input
-        value={formData.title}
-        onChange={onChangeHandler}
+          value={formData.title}
+          onChange={onChangeHandler}
           type="text"
           name="title"
           placeholder="Enter Title"
           className="px-3 py-2 border-2 w-full"
         />
         <textarea
-        value={formData.description}
-        onChange={onChangeHandler}
+          value={formData.description}
+          onChange={onChangeHandler}
           name="description"
           placeholder="Enter Description"
           className="px-3 py-2 border-2 w-full"
@@ -78,10 +98,15 @@ export default function Home() {
               <th scope="col" className="px-6 py-3 text-center">
                 Status
               </th>
+              <th scope="col" className="px-6 py-3 text-center">
+                Action
+              </th>
             </tr>
           </thead>
           <tbody>
-            <TodoList />
+            {todoData.map((todo, idx) => (
+              <TodoList key={idx} todo={todo} id={idx} />
+            ))}
           </tbody>
         </table>
       </div>
