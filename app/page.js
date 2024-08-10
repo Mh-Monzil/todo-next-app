@@ -22,7 +22,19 @@ export default function Home() {
     const res = await axios.delete(`/api`, {
       params: { mongoId: id },
     });
-    toast.success(res.data.message)
+    toast.success(res.data.message);
+    fetchTodos();
+  };
+
+  const completeTodo = async (id) => {
+    const res = await axios.put(
+      `/api`,
+      {},
+      {
+        params: { mongoId: id },
+      }
+    );
+    toast.success(res.data.message);
     fetchTodos();
   };
 
@@ -91,9 +103,9 @@ export default function Home() {
 
       {/* table  */}
 
-      <div className="relative overflow-x-auto mt-24 w-[60%] mx-auto">
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <div className="relative overflow-x-auto mt-24 w-[70%] mx-auto">
+        <table className="w-full text-sm border-2  text-center">
+          <thead className="text-xs uppercase bg-black text-white  border-b-2 border-b-gray-600">
             <tr>
               <th scope="col" className="px-6 py-3">
                 Id
@@ -114,7 +126,13 @@ export default function Home() {
           </thead>
           <tbody>
             {todoData.map((todo, idx) => (
-              <TodoList key={idx} todo={todo} id={idx} deleteTodo={deleteTodo} />
+              <TodoList
+                key={idx}
+                todo={todo}
+                id={idx}
+                deleteTodo={deleteTodo}
+                completeTodo={completeTodo}
+              />
             ))}
           </tbody>
         </table>
