@@ -111,6 +111,9 @@ export default function Home() {
                 Id
               </th>
               <th scope="col" className="px-6 py-3">
+                start
+              </th>
+              <th scope="col" className="px-6 py-3">
                 Title
               </th>
               <th scope="col" className="px-6 py-3">
